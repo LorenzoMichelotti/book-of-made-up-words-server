@@ -13,7 +13,7 @@ router.get('/words', async function(req, res, next) {
 
   const wordsCol = query(collection(req.firestore, 'words'), orderBy("createDate"));
   const wordsSnapshot = await getDocs(wordsCol);
-  const wordsList = wordsSnapshot.docs.map(doc => doc.data()).slice(skip, skip+perPage);
+  const wordsList = wordsSnapshot.docs.map(doc => doc.data()).slice(skip, skip + perPage);
   res.json({words :wordsList, count: wordsSnapshot.size});
 });
 
