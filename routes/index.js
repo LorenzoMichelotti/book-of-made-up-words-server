@@ -11,7 +11,7 @@ router.get('/words', async function(req, res, next) {
   const perPage = req.query.perPage;
   const skip = (page - 1) * perPage;
 
-  const wordsCol = query(collection(req.firestore, 'words'), orderBy("createDate"));
+  const wordsCol = query(collection(req.firestore, 'words'), orderBy("createDate", "desc"));
   const wordsSnapshot = await getDocs(wordsCol);
   const wordsList = wordsSnapshot.docs.map(doc => doc.data()).slice(skip, skip + perPage);
   res.json({words :wordsList, count: wordsSnapshot.size});
