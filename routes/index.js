@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { collection, getDocs, addDoc , Timestamp, orderBy, query } = require("firebase/firestore");
+const { collection, getDocs, addDoc , Timestamp, orderBy, query, where } = require("firebase/firestore");
 
 router.get('/', function(req, res, next) {
   res.json({status: 'online'});
@@ -12,6 +12,19 @@ router.get('/words', async function(req, res, next) {
   const skip = (page - 1) * perPage;
 
   const wordsCol = query(collection(req.firestore, 'words'), orderBy("createDate", "desc"));
+  const wordsSnapshot = await getDocs(wordsCol);
+  const wordsList = wordsSnapshot.docs.map(doc => doc.data()).slice(skip, skip + perPage);
+  res.json({words :wordsList, count: wordsSnapshot.size});
+});
+
+router.get('/get_word_by_name', async function(req, res, next) {
+  const page = req.query.page;
+  const perPage = req.query.perPage;
+  const skip = (page - 1) * perPage;
+
+  const search = req.query.search;
+
+  const wordsCol = query(collection(req.firestore, 'words'), where('wordName', '==', search), orderBy("createDate", "desc"));
   const wordsSnapshot = await getDocs(wordsCol);
   const wordsList = wordsSnapshot.docs.map(doc => doc.data()).slice(skip, skip + perPage);
   res.json({words :wordsList, count: wordsSnapshot.size});
