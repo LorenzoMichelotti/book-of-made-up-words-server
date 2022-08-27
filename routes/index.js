@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { collection, getDocs, addDoc , Timestamp, orderBy, query, limit, startAt } = require("firebase/firestore");
+const { collection, getDocs, addDoc , Timestamp, orderBy, query } = require("firebase/firestore");
 
 router.get('/', function(req, res, next) {
   res.json({status: 'online'});
